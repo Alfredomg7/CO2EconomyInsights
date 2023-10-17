@@ -17,6 +17,7 @@ path = "data/raw_data/"
 # Load and inspect datasets
 datasets = {}
 for filename in files_and_indicators.keys():
+    
     # Load dataset
     data = pd.read_csv(f"{path}{filename}.csv")
     
@@ -34,13 +35,16 @@ for filename in files_and_indicators.keys():
 """ Data Cleaning """
 cleaned_datasets = {}
 for filename, indicator_name in files_and_indicators.items():
+    
     data = datasets[filename]
     cleaned_data = None
 
     if indicator_name is not None:
         cleaned_data = clean_indicators_data(data)
+    
     elif filename == "temp_data":
-        cleaned_data = clean_temperature_data(data)
+        cleaned_data = clean_temperature_data(data,cleaned_datasets["co2_data"])
+        
     elif filename == "country_data":
         cleaned_data = clean_country_data(data)
 

@@ -22,7 +22,7 @@ def clean_country_data(data):
     
     return clean_data
 
-def clean_temperature_data(data):
+def clean_temperature_data(data, country_data):
     # Preprocessing and filtering data
     data["dt"] = pd.to_datetime(data["dt"])
     data["Year"] = data["dt"].dt.year
@@ -38,7 +38,24 @@ def clean_temperature_data(data):
     pivot_data = pivot_data[['Country', 'Country Code'] + [col for col in pivot_data if col not in ['Country', 'Country Code']]] 
 
     # Renaming columns
-    pivot_data.columns = ['Country Name', 'Country Code'] + [str(col) for col in pivot_data.columns[2:]]
+    country_columns = ["Country Name", "Country Code"]
+    pivot_data.columns = country_columns + [str(col) for col in pivot_data.columns[2:]]
+    
+    # Copy country codes from country_data to pivot_data
+    clean_data = pd.merge(
+        pivot_data,
+        country_data[country_columns],
+        on="Country Name",
+        how="left"
+        )
+    
+    # Drop the old Country Code column and rename the new one
+    clean_data.drop(columns=["Country Code_x"], inplace=True)
+    clean_data.rename(columns={"Country Code_y": "Country Code"}, inplace=True)
 
-    return pivot_data
+    # Reorder columns to make Country Code the second column
+    cols = country_columns + [col for col in clean_data if col not in country_columns]
+    clean_data = clean_data[cols]
+
+    return clean_data
 
