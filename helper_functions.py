@@ -1,22 +1,36 @@
 import pandas as pd
 
 def inspect_data(data):
+    # Print the first 10 rows of the DataFrame
     print(data.head(10))
+    
+    # Print the info of the DataFrame (column names, counts, data types etc.)
     print(data.info())
-    print("-"*220)  
-
-    return None
+    
+    # Print a separator line for better readability
+    print("-"*220)
 
 def clean_indicators_data(data):
-    columns_to_keep = ["Country Name", "Country Code"] + [str(year) for year in range(1990, 2021)]
+    # Generate a list of year strings for the required range
+    years = [str(year) for year in range(1990, 2021)]
+    
+    # Define the columns to be retained in the cleaned data
+    columns_to_keep = ["Country Name", "Country Code"] + years
+    
+    # Filter the DataFrame to only include the specified columns
     clean_data = data[columns_to_keep]
-    clean_data = clean_data.dropna(subset=[str(year) for year in range(1990,2021)], how='all')
+    
+    # Drop the rows where all year columns have NaN values
+    clean_data = clean_data.dropna(subset=years, how='all')
 
     return clean_data
 
 def clean_country_data(data):
+    # Drop the 'SpecialNotes' column from the DataFrame
     clean_data = data.drop(columns=["SpecialNotes"])
+    # Rename the 'TableName' column to 'Country Name
     clean_data.rename(columns={"TableName":"Country Name"}, inplace=True)
+    # Reorder the columns to place 'Country Name' at the first position
     cols = ["Country Name"] + [col for col in clean_data if col!= "Country Name"]
     clean_data = clean_data[cols]
     
@@ -24,38 +38,27 @@ def clean_country_data(data):
 
 def clean_temperature_data(data, country_data):
     # Preprocessing and filtering data
-    data["dt"] = pd.to_datetime(data["dt"])
-    data["Year"] = data["dt"].dt.year
-    data = data[data["Year"].between(1990,2020)]
+    data['Year'] = pd.to_datetime(data['dt']).dt.year
+    data = data[data['Year'].between(1990, 2020)]
 
-    # Grouping and aggregating data
-    annual_data = data.groupby(["Year","Country"])["AverageTemperature"].mean().reset_index()
-    # Pivoting data
-    pivot_data = annual_data.pivot(index="Country", columns="Year", values="AverageTemperature").reset_index()
-    
-    # Adding and ordering columns
-    pivot_data["Country Code"] = ""
-    pivot_data = pivot_data[['Country', 'Country Code'] + [col for col in pivot_data if col not in ['Country', 'Country Code']]] 
+    # Grouping and aggregating data, then pivoting
+    pivot_data = data.groupby(['Year', 'Country'])['AverageTemperature']\
+                     .mean().unstack('Year').reset_index()
 
-    # Renaming columns
-    country_columns = ["Country Name", "Country Code"]
-    pivot_data.columns = country_columns + [str(col) for col in pivot_data.columns[2:]]
-    
-    # Copy country codes from country_data to pivot_data
-    clean_data = pd.merge(
-        pivot_data,
-        country_data[country_columns],
-        on="Country Name",
-        how="left"
-        )
-    
-    # Drop the old Country Code column and rename the new one
-    clean_data.drop(columns=["Country Code_x"], inplace=True)
-    clean_data.rename(columns={"Country Code_y": "Country Code"}, inplace=True)
+    # Merging with country_data to get the country codes
+    cleaned_data = pd.merge(pivot_data, country_data[['Country Name', 'Country Code']],
+                            left_on='Country', right_on='Country Name', how='left')\
+                     .drop(columns='Country')
 
-    # Reorder columns to make Country Code the second column
-    cols = country_columns + [col for col in clean_data if col not in country_columns]
-    clean_data = clean_data[cols]
+    # Reordering columns
+    cols = ['Country Name', 'Country Code'] + [str(year) for year in range(1990, 2021)]
+    cleaned_data = cleaned_data[cols]
 
-    return clean_data
+    return cleaned_data
+
+
+
+
+
+
 
