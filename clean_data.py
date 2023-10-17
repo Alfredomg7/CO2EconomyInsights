@@ -1,0 +1,59 @@
+""" Data Preparation """
+import pandas as pd
+from helper_functions import *
+
+# File names and their respective indicators
+files_and_indicators = {
+    "co2_data": None,
+    "gdp_data": None,
+    "pop_data": None,
+    "country_data": None,
+    "temp_data": None
+}
+
+# Base path
+path = "data/raw_data/"
+
+# Load and inspect datasets
+datasets = {}
+for filename in files_and_indicators.keys():
+    # Load dataset
+    data = pd.read_csv(f"{path}{filename}.csv")
+    
+    # Store dataset in the dictionary
+    datasets[filename] = data
+
+    # Inspect original data
+    print(f"Inspecting {filename}:")
+    inspect_data(data)
+
+    # Save the indicator name if available
+    if "Indicator Name" in data.columns:
+        files_and_indicators[filename] = data["Indicator Name"].iloc[0]
+
+""" Data Cleaning """
+cleaned_datasets = {}
+for filename, indicator_name in files_and_indicators.items():
+    data = datasets[filename]
+    cleaned_data = None
+
+    if indicator_name is not None:
+        cleaned_data = clean_indicators_data(data)
+    elif filename == "temp_data":
+        cleaned_data = clean_temperature_data(data)
+    elif filename == "country_data":
+        cleaned_data = clean_country_data(data)
+
+    # Store cleaned data in the dictionary
+    cleaned_datasets[filename] = cleaned_data
+
+    # Inspect cleaned data
+    print(f"Inspecting cleaned {filename}:")
+    inspect_data(cleaned_data)
+
+    # Save cleaned data to a new CSV file
+    cleaned_data.to_csv(f"data/clean_data/cleaned_{filename}.csv", index=False)
+
+
+
+
