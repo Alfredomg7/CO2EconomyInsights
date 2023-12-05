@@ -24,13 +24,16 @@ for filename in files_and_indicators.keys():
     # Store dataset in the dictionary
     datasets[filename] = data
 
-    # Inspect original data
+    # Inspect raw data
     print(f"Inspecting {filename}:")
     inspect_data(data)
 
     # Save the indicator name if available
     if "Indicator Name" in data.columns:
         files_and_indicators[filename] = data["Indicator Name"].iloc[0]
+
+# Get a list of valid countries from the country_data
+valid_countries = get_valid_country_codes(datasets["country_data"])
 
 """ Data Cleaning """
 cleaned_datasets = {}
@@ -40,13 +43,13 @@ for filename, indicator_name in files_and_indicators.items():
     cleaned_data = None
 
     if indicator_name is not None:
-        cleaned_data = clean_indicators_data(data)
+        cleaned_data = clean_indicators_data(data, valid_countries)
     
     elif filename == "temp_data":
         cleaned_data = clean_temperature_data(data,cleaned_datasets["co2_data"])
         
     elif filename == "country_data":
-        cleaned_data = clean_country_data(data)
+        cleaned_data = clean_country_data(data, valid_countries)
 
     # Store cleaned data in the dictionary
     cleaned_datasets[filename] = cleaned_data

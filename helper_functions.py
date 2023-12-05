@@ -18,7 +18,7 @@ def clean_indicators_data(data, valid_countries):
     # Drop the rows where all year columns have NaN values
     clean_data = clean_data.dropna(subset=years, how='all')
     # Filter to include only valid countries
-    clean_data = clean_data[clean_data['Country Name'].isin(valid_countries)]
+    clean_data = clean_data[clean_data['Country Code'].isin(valid_countries)]
 
     return clean_data
 
@@ -31,7 +31,7 @@ def clean_country_data(data,valid_countries):
     cols = ["Country Name"] + [col for col in clean_data if col!= "Country Name"]
     clean_data = clean_data[cols]
     # Filter to include only valid countries
-    clean_data = clean_data[clean_data['Country Name'].isin(valid_countries)]
+    clean_data = clean_data[clean_data['Country Code'].isin(valid_countries)]
 
     return clean_data
 
@@ -55,10 +55,10 @@ def clean_temperature_data(data, country_data):
 
     return cleaned_data
 
-def get_valid_countries(country_data, region_column='Region', country_column='Country Name'):
-    # Get a list of valid countries based on the non-null 'Region' column
+def get_valid_country_codes(country_data, region_column='Region', country_code_column='Country Code'):
+    # Get a list of valid countries codes based on the non-null 'Region' column
     valid_countries = country_data[country_data[region_column].notna()]
-    return valid_countries[country_column].tolist()
+    return valid_countries[country_code_column].tolist()
 
 
 

@@ -27,9 +27,9 @@ fig = px.line(annual_global_emissions,
 fig.update_traces(line=dict(color='#b30000', width=2), mode='lines+markers')
 
 # Show plot
-fig.show()
+#fig.show()
 
-"""Top 10 countries with highest C02 emissions
+""" Top 10 countries with highest C02 emissions """
 # Melt the Dataframe to get a 'Year' column
 co2_data_melted = co2_data.melt(id_vars=["Country Name", "Country Code"], 
                                 var_name="Year", 
@@ -41,4 +41,6 @@ co2_data_melted["Year"] = co2_data_melted["Year"].astype(int)
 # Get top 10 countries with highest emmissions in the most recent year's data
 latest_year = co2_data_melted["Year"].max()
 top_countries = co2_data_melted[co2_data_melted['Year'] == latest_year]\
-                    .nlargest(10, 'CO2 Emissions')['Country Name'].tolist()"""
+                    .nlargest(10, 'CO2 Emissions')['Country Name'].tolist()
+
+print(top_countries)
