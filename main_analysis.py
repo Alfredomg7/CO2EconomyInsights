@@ -29,18 +29,23 @@ fig.update_traces(line=dict(color='#b30000', width=2), mode='lines+markers')
 # Show plot
 #fig.show()
 
-""" Top 10 countries with highest C02 emissions """
+""" C02 emissions by Country """
 # Melt the Dataframe to get a 'Year' column
 co2_data_melted = co2_data.melt(id_vars=["Country Name", "Country Code"], 
                                 var_name="Year", 
                                 value_name="CO2 Emissions")
 
-# Convert 'Year' from string to integer
-co2_data_melted["Year"] = co2_data_melted["Year"].astype(int)
+# Sum CO2 emmissions for each country across all years
+country_total_emissions = co2_data_melted.groupby("Country Name")["CO2 Emissions"].sum().reset_index()
 
-# Get top 10 countries with highest emmissions in the most recent year's data
-latest_year = co2_data_melted["Year"].max()
-top_countries = co2_data_melted[co2_data_melted['Year'] == latest_year]\
-                    .nlargest(10, 'CO2 Emissions')['Country Name'].tolist()
+# Create an interactive world map of CO2 emissions by country
+fig = px.choropleth(country_total_emissions,
+                    locations="Country Name",
+                    locationmode="country names",
+                    color="CO2 Emissions",
+                    hover_name="Country Name",
+                    color_continuous_scale=px.colors.sequential.Plasma,
+                    title="Total CO2 Emissions by Country (1990-2020)")
 
-print(top_countries)
+# Show the visualization
+fig.show()
