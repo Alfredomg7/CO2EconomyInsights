@@ -8,19 +8,19 @@ We believe that understanding the dynamics of CO2 emissions is essential to form
 The primary objective of this project is to analyze the trends and correlations between CO2 emissions and economic (GDP), demographic (population), and environmental (temperature) factors across different countries and regions from 1990 to 2020. The analysis aims to identify the leading contributors to CO2 emissions, understand the influence of economic growth and population size on emissions, and observe the impact of rising temperatures, providing insights for targeted climate action.
 
 ## Questions to Answer:
-1. How have global CO2 emissions trends evolved over the past three decades (1990-2020)?
+1. **Global CO2 Emissions Trends** (1990-2020):
 - **Chart**: Line graph showing the global yearly CO2 emissions over time.
-- **Purpose**: To visualize the overall trend of CO2 emissions globally, identifying periods of increase or decrease.
-2. Which countries are the top contributors to CO2 emissions, and how have they changed over time?
-- **Chart**: Stacked bar or area chart showing the top 10 countries' yearly emissions.
-- **Purpose**: To identify the major contributors to global CO2 emissions and observe their emission trends over time.
-3. Is there a correlation between a country’s GDP and its CO2 emissions?
+- **Purpose**: Visualize the overall trend of CO2 emissions globally, identifying periods of increase or decrease.
+2. **Geographical Distribution and Top Contributors to CO2 Emissions**:
+- **Chart**: Interactive global map visualizing total CO2 emissions by country from 1990 to 2020. Additional charts showing top contributors' yearly emissions could be stacked bar or area charts.
+- **Purpose**: Identify major contributors to global CO2 emissions in a geographic context and observe their emission trends over time. The interactive map provides a global overview, while additional charts can delve into specific trends for top-emitting countries.
+3. **Correlation Between GDP and CO2 Emissions**:
 - **Chart**: Scatter plot with GDP on the x-axis and CO2 emissions on the y-axis, possibly utilizing a trend line or color-coding by country/region.
-- **Purpose**: To analyze the relationship between economic development (GDP) and CO2 emissions, exploring whether economic growth leads to higher emissions.
-4. How does population size relate to CO2 emissions in various countries?
+- **Purpose**: Analyze the relationship between economic development (GDP) and CO2 emissions, exploring whether economic growth leads to higher emissions.
+4. **Population Size and CO2 Emissions**:
 - **Chart**: Bubble chart where each bubble’s size represents a country's population, placed on a grid of CO2 emissions vs time or GDP.
 - **Purpose**: To investigate if countries with larger populations tend to have higher emissions, and if population growth correlates with emission increases.
-5. How have average temperatures changed alongside CO2 emissions over the years?
+5. **Temperature Changes Alongside CO2 Emissions**:
 - **Chart**: Dual-axis line chart with yearly average temperatures and CO2 emissions over time.
 - **Purpose**: To explore potential correlations between rising temperatures and increasing CO2 emissions, providing insights into climate change dynamics.
 
