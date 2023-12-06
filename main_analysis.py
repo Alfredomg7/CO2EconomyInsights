@@ -28,13 +28,9 @@ fig.update_traces(line=dict(color='#b30000', width=2), mode='lines+markers')
 fig.show()
 
 """ C02 emissions by Country"""
-# Melt the 'co2_data' Dataframe to get a 'Year' column
-co2_data_melted = co2_data.melt(id_vars=["Country Name", "Country Code"], 
-                                var_name="Year", 
-                                value_name="CO2 Emissions")
 
 # Sum CO2 emmissions for each country across all years
-country_total_emissions = co2_data_melted.groupby("Country Name")["CO2 Emissions"].sum().reset_index()
+country_total_emissions = co2_data.groupby("Country Name")["CO2 Emissions"].sum().reset_index()
 
 # Create an interactive world map of CO2 emissions by country
 fig = px.choropleth(country_total_emissions,
@@ -52,7 +48,7 @@ fig.update_layout(coloraxis_showscale=False)
 fig.show()
 
 # Identify the top 10 emitting countries over the entire period
-top_emitters = co2_data_melted.groupby('Country Name')['CO2 Emissions'].sum().nlargest(10).reset_index()
+top_emitters = co2_data.groupby('Country Name')['CO2 Emissions'].sum().nlargest(10).reset_index()
 
 # Create the bar chart visualization for the sum of CO2 emissions from 1990 to 2020
 fig = px.bar(top_emitters,
@@ -74,18 +70,10 @@ fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
 fig.show()
 
 """Correlation Between GDP and CO2 Emissions"""
-# Melt the 'gdp_data' Dataframe to get a 'Year' column
-gdp_data_melted = gdp_data.melt(id_vars=["Country Name", "Country Code"],
-                                var_name="Year",
-                                value_name="GDP")
-
-# Convert 'Year' to int for both datasets
-gdp_data_melted['Year'] = gdp_data_melted['Year'].astype(int)
-co2_data_melted['Year'] = co2_data_melted['Year'].astype(int)
 
 # Sum the CO2 emissions and GDP for each country over all years
-co2_total = co2_data_melted.groupby('Country Code')['CO2 Emissions'].sum().reset_index()
-gdp_total = gdp_data_melted.groupby('Country Code')['GDP'].sum().reset_index()
+co2_total = co2_data.groupby('Country Code')['CO2 Emissions'].sum().reset_index()
+gdp_total = gdp_data.groupby('Country Code')['GDP'].sum().reset_index()
 
 # Merge the totals on 'Country Code'
 co2_gdp_data = pd.merge(co2_total, gdp_total, on='Country Code')
@@ -113,17 +101,9 @@ fig.update_layout(
 fig.show()
 
 """Population vs CO2 Emissions"""
-# Melt the 'pop_data' Dataframe to get a 'Year' Column
-pop_data_melted = pop_data.melt(id_vars=["Country Name", "Country Code"],
-                                var_name = "Year",
-                                value_name="Population")
-
-# Convert 'Year' to int
-pop_data_melted["Year"] = pop_data_melted["Year"].astype(int)
-
 # Average the CO2 Emissions and population for each country over all years
-co2_mean = co2_data_melted.groupby("Country Code")["CO2 Emissions"].mean().reset_index()
-pop_mean = pop_data_melted.groupby("Country Code")["Population"].mean().reset_index()
+co2_mean = co2_data.groupby("Country Code")["CO2 Emissions"].mean().reset_index()
+pop_mean = pop_data.groupby("Country Code")["Population"].mean().reset_index()
 
 # Filter out countries with population less than 10M and higher than 250M
 min_pop = 10000000
