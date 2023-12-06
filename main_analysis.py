@@ -27,7 +27,7 @@ fig = px.line(annual_global_emissions,
 fig.update_traces(line=dict(color='#b30000', width=2), mode='lines+markers')
 
 # Show plot
-#fig.show()
+fig.show()
 
 """ C02 emissions by Country """
 # Melt the Dataframe to get a 'Year' column
@@ -44,8 +44,27 @@ fig = px.choropleth(country_total_emissions,
                     locationmode="country names",
                     color="CO2 Emissions",
                     hover_name="Country Name",
-                    color_continuous_scale=px.colors.sequential.Plasma,
+                    color_continuous_scale=px.colors.diverging.RdYlGn_r,
                     title="Total CO2 Emissions by Country (1990-2020)")
 
 # Show the visualization
+fig.show()
+
+# Identify the top 10 emitting countries over the entire period
+top_emitters = co2_data_melted.groupby('Country Name')['CO2 Emissions'].sum().nlargest(10).reset_index()
+
+# Create the bar chart visualization for the sum of CO2 emissions from 1990 to 2020
+fig = px.bar(top_emitters,
+             x='Country Name',
+             y='CO2 Emissions',
+             title='Total CO2 Emissions from 1990 to 2020 for Top 10 Emitting Countries',
+             labels={'CO2 Emissions':'Total CO2 Emissions (metric tons)'},
+             text='CO2 Emissions')
+
+# Customize the layout for better readability
+fig.update_layout(xaxis_tickangle=-45, 
+                  yaxis=dict(title='Total CO2 Emissions (metric tons)'))
+fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
+
+# Show the figure
 fig.show()
