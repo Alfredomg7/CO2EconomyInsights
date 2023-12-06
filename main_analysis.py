@@ -7,6 +7,7 @@ co2_data = pd.read_csv(f"{path}cleaned_co2_data.csv")
 gdp_data = pd.read_csv(f"{path}cleaned_gdp_data.csv")
 pop_data = pd.read_csv(f"{path}cleaned_pop_data.csv")
 temp_data = pd.read_csv(f"{path}cleaned_temp_data.csv")
+country_data = pd.read_csv(f"{path}cleaned_country_data.csv")
 
 """Global CO2 emissions trends"""
 # Sum CO2 emissions for each year
@@ -95,19 +96,18 @@ gdp_total = gdp_data_melted.groupby('Country Code')['GDP'].sum().reset_index()
 
 # Merge the totals on 'Country Code'
 co2_gdp_data = pd.merge(co2_total, gdp_total, on='Country Code')
+# Merge the 'country_data' dataset to add 'Region' and 'Income Group'
 
-# Retrieve country names for the merged dataset
-country_names = co2_data_melted[['Country Code', 'Country Name']].drop_duplicates()
-co2_gdp_data = co2_gdp_data.merge(country_names, on='Country Code')
+co2_gdp_data = pd.merge(co2_gdp_data, country_data, on='Country Code')
 
 # Create the scatter plot
 fig = px.scatter(co2_gdp_data,
+                 
                  x='GDP', 
                  y='CO2 Emissions',
                  hover_name='Country Name',
                  title='Total GDP vs Total CO2 Emissions (1990-2020)',
-                 color='CO2 Emissions',
-                 color_continuous_scale=px.colors.diverging.RdYlGn_r,
+                 color='IncomeGroup',
                  log_x=True,
                  log_y=True,
                  size_max=60)
