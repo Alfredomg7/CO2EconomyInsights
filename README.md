@@ -12,8 +12,8 @@ The primary objective of this project is to analyze the trends and correlations 
 - **Chart**: Line graph showing the global yearly CO2 emissions over time.
 - **Purpose**: Visualize the overall trend of CO2 emissions globally, identifying periods of increase or decrease.
 2. **Geographical Distribution and Top Contributors to CO2 Emissions**:
-- **Chart**: Interactive global map visualizing total CO2 emissions by country from 1990 to 2020. Additional charts showing top contributors' yearly emissions could be stacked bar or area charts.
-- **Purpose**: Identify major contributors to global CO2 emissions in a geographic context and observe their emission trends over time. The interactive map provides a global overview, while additional charts can delve into specific trends for top-emitting countries.
+- **Chart**: Interactive global map visualizing total CO2 emissions by country from 1990 to 2020 and a bar chart showing top contributors emissions.
+- **Purpose**: Identify major contributors to global CO2 emissions. The interactive map provides a global overview, while the bar chart highlights the top 10 contributors.
 3. **Correlation Between GDP and CO2 Emissions**:
 - **Chart**: Scatter plot with GDP on the x-axis and CO2 emissions on the y-axis, possibly utilizing a trend line or color-coding by country/region.
 - **Purpose**: Analyze the relationship between economic development (GDP) and CO2 emissions, exploring whether economic growth leads to higher emissions.
