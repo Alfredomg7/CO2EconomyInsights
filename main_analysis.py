@@ -96,28 +96,70 @@ gdp_total = gdp_data_melted.groupby('Country Code')['GDP'].sum().reset_index()
 
 # Merge the totals on 'Country Code'
 co2_gdp_data = pd.merge(co2_total, gdp_total, on='Country Code')
-# Merge the 'country_data' dataset to add 'Region' and 'Income Group'
 
+# Merge the 'country_data' dataset to add 'Region' and 'Income Group'
 co2_gdp_data = pd.merge(co2_gdp_data, country_data, on='Country Code')
 
 # Create the scatter plot
-fig = px.scatter(co2_gdp_data,
-                 
+fig = px.scatter(co2_gdp_data,      
                  x='GDP', 
                  y='CO2 Emissions',
                  hover_name='Country Name',
                  title='Total GDP vs Total CO2 Emissions (1990-2020)',
                  color='IncomeGroup',
                  log_x=True,
-                 log_y=True,
-                 size_max=60)
+                 log_y=True)
 
 # Customize the layout
 fig.update_layout(
     xaxis_title="Total GDP (in USD - log scale)",
     yaxis_title="Total CO2 Emissions (in metric tons - log scale)",
-    coloraxis_showscale=False
 )
 
 # Show the figure
+fig.show()
+
+"""Population vs CO2 Emissions"""
+# Melt the 'pop_data' Dataframe to get a 'Year' Column
+pop_data_melted = pop_data.melt(id_vars=["Country Name", "Country Code"],
+                                var_name = "Year",
+                                value_name="Population")
+
+# Convert 'Year' to int
+pop_data_melted["Year"] = pop_data_melted["Year"].astype(int)
+
+# Average the CO2 Emissions and population for each country over all years
+co2_mean = co2_data_melted.groupby("Country Code")["CO2 Emissions"].mean().reset_index()
+pop_mean = pop_data_melted.groupby("Country Code")["Population"].mean().reset_index()
+
+# Filter out countries with population less than 10M and higher than 250M
+min_pop = 10000000
+max_pop = 250000000
+pop_mean = pop_mean[(pop_mean["Population"] > min_pop) & (pop_mean["Population"] < max_pop)]
+
+# Merge the totals on 'Country Code'
+co2_pop_data = pd.merge(pop_mean, co2_mean, on="Country Code")
+
+# Merge with 'country data'
+co2_pop_data = pd.merge(co2_pop_data, country_data, on="Country Code")
+
+# Create the buble chart
+fig = px.scatter(co2_pop_data,
+                 x="Population",
+                 y="CO2 Emissions",
+                 hover_name="Country Name",
+                 title="Population vs CO2 Emissions (1990-2020)",
+                 size="Population",
+                 color="Region",
+                 log_x=True,
+                 log_y=True
+                )
+
+# Customize the layout
+fig.update_layout(
+    xaxis_title="Average Population (log scale)",
+    yaxis_title="Total CO2 Emissions (in metric tons - log scale)",
+)
+
+# Show the chart
 fig.show()
