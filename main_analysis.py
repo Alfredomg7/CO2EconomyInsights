@@ -85,28 +85,46 @@ small_countries_data = total_data[total_data["Population"] < median_population]
 big_countries_data = total_data[total_data["Population"] >= median_population]
 
 # Define function for create bubble chart
-def create_bubble_chart(data, data_label):
+def create_bubble_chart(data, data_label, xaxis_title, yaxis_title, x="GDP", y="CO2 Emissions", size="Population", 
+                        color="IncomeGroup", hover_name="Country Name", start_year="1990", end_year="2020", log=True):
+    
     fig = px.scatter(data,
-                    x="GDP",
-                    y="CO2 Emissions",
-                    size="Population",
-                    color="IncomeGroup",
-                    hover_name="Country Name",
-                    title=f"GDP vs CO2 Emissions by Population and Income Group ({data_label})",
+                    x=x,
+                    y=y,
+                    size=size,
+                    color=color,
+                    hover_name=hover_name,
+                    title=f"{x} vs {y} by {size} and {color} from {start_year} to {end_year} ({data_label})",
                     size_max=60,
-                    log_x=True,
-                    log_y=True
+                    log_x=log,
+                    log_y=log
                     )
+    
     # Customize the layout
     fig.update_layout(
-        xaxis_title="Total GDP (in USD - log scale)",
-        yaxis_title="Total CO2 Emissions (in metric tons - log scale)"
+        xaxis_title=xaxis_title,
+        yaxis_title=yaxis_title
     )
     # Display chart
     fig.show()
 
 # Create bubble chart for small countries data
-create_bubble_chart(small_countries_data, "Small Countries")
+data_label = "Small Countries"
+xaxis_title = "Average GDP (in USD - log scale)"
+yaxis_title = "Average CO2 Emissions (in metric tons - log scale)"
+create_bubble_chart(small_countries_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title)
 
-# Create buble chart for big countries data
-create_bubble_chart(big_countries_data, "Big Countries")
+# Create bubble chart for big countries data
+data_label = "Big Countries"
+create_bubble_chart(big_countries_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title)
+
+"""GDP vs Emissions per Capita"""
+# Create emissions per capita column
+total_data["CO2 Emissions per Capita"] = total_data["CO2 Emissions"] / total_data ["Population"]
+
+# Create scatter plot
+data_label = "All Countries"
+xaxis_title = "Average GDP (in USD)"
+yaxis_title = "Average CO2 Emissions per Capita"
+y = "CO2 Emissions per Capita"
+create_bubble_chart(total_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title, y=y, size=None, log=False)
