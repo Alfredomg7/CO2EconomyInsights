@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly.express as px
+from functools import reduce
 
 # Load cleaned datasets
 path = "data/clean_data/"
@@ -66,70 +67,46 @@ fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
 # Show the figure
 fig.show()
 
-"""Correlation Between GDP and CO2 Emissions"""
-
-# Sum the CO2 emissions and GDP for each country over all years
-co2_total = co2_data.groupby('Country Code')['CO2 Emissions'].sum().reset_index()
-gdp_total = gdp_data.groupby('Country Code')['GDP'].sum().reset_index()
-
-# Merge the totals on 'Country Code'
-co2_gdp_data = pd.merge(co2_total, gdp_total, on='Country Code')
-
-# Merge the 'country_data' dataset to add 'Region' and 'Income Group'
-co2_gdp_data = pd.merge(co2_gdp_data, country_data, on='Country Code')
-
-# Create the scatter plot
-fig = px.scatter(co2_gdp_data,      
-                 x='GDP', 
-                 y='CO2 Emissions',
-                 hover_name='Country Name',
-                 title='Total GDP vs Total CO2 Emissions (1990-2020)',
-                 color='IncomeGroup',
-                 log_x=True,
-                 log_y=True)
-
-# Customize the layout
-fig.update_layout(
-    xaxis_title="Total GDP (in USD - log scale)",
-    yaxis_title="Total CO2 Emissions (in metric tons - log scale)",
-)
-
-# Show the figure
-#fig.show()
-
-"""Population vs CO2 Emissions"""
-# Average the CO2 Emissions and population for each country over all years
-co2_mean = co2_data.groupby("Country Code")["CO2 Emissions"].mean().reset_index()
+"""GDP, Population and CO2 correlation"""
+# Aggregate GDP, Population and CO2 mean values by year on 'Country Code'
+gdp_mean = gdp_data.groupby("Country Code")["GDP"].mean().reset_index()
 pop_mean = pop_data.groupby("Country Code")["Population"].mean().reset_index()
+co2_mean = co2_data.groupby("Country Code")["CO2 Emissions"].mean().reset_index()
 
-# Filter out countries with population less than 10M and higher than 250M
-min_pop = 10000000
-max_pop = 250000000
-pop_mean = pop_mean[(pop_mean["Population"] > min_pop) & (pop_mean["Population"] < max_pop)]
+# List of dataframes to merge
+dataframes = [gdp_mean, pop_mean, co2_mean, country_data]
 
-# Merge the totals on 'Country Code'
-co2_pop_data = pd.merge(pop_mean, co2_mean, on="Country Code")
+# Merge the GDP, Population, CO2 and Country data with reduce
+total_data = reduce(lambda left, right: pd.merge(left, right, on='Country Code', suffixes=('', '_right')), dataframes)
 
-# Merge with 'country data'
-co2_pop_data = pd.merge(co2_pop_data, country_data, on="Country Code")
+# Splitting data between small and big countries based on median population for all countries
+median_population = round(total_data["Population"].median()) # Using median value will split the countries evenly
+small_countries_data = total_data[total_data["Population"] < median_population]
+big_countries_data = total_data[total_data["Population"] >= median_population]
 
-# Create the bubble chart
-fig = px.scatter(co2_pop_data,
-                 x="Population",
-                 y="CO2 Emissions",
-                 hover_name="Country Name",
-                 title="Population vs CO2 Emissions (1990-2020)",
-                 size="Population",
-                 color="Region",
-                 log_x=True,
-                 log_y=True
-                )
+# Define function for create bubble chart
+def create_bubble_chart(data, data_label):
+    fig = px.scatter(data,
+                    x="GDP",
+                    y="CO2 Emissions",
+                    size="Population",
+                    color="IncomeGroup",
+                    hover_name="Country Name",
+                    title=f"GDP vs CO2 Emissions by Population and Income Group ({data_label})",
+                    size_max=60,
+                    log_x=True,
+                    log_y=True
+                    )
+    # Customize the layout
+    fig.update_layout(
+        xaxis_title="Total GDP (in USD - log scale)",
+        yaxis_title="Total CO2 Emissions (in metric tons - log scale)"
+    )
+    # Display chart
+    fig.show()
 
-# Customize the layout
-fig.update_layout(
-    xaxis_title="Average Population (log scale)",
-    yaxis_title="Total CO2 Emissions (in metric tons - log scale)",
-)
+# Create bubble chart for small countries data
+create_bubble_chart(small_countries_data, "Small Countries")
 
-# Show the chart
-#fig.show()
+# Create buble chart for big countries data
+create_bubble_chart(big_countries_data, "Big Countries")
