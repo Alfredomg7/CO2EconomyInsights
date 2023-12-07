@@ -10,25 +10,25 @@ temp_data = pd.read_csv(f"{path}cleaned_temp_data.csv")
 country_data = pd.read_csv(f"{path}cleaned_country_data.csv")
 
 """Global CO2 emissions trends"""
+# Sum the CO2 emissions for each year 
 annual_global_emissions = co2_data.groupby("Year")["CO2 Emissions"].sum().reset_index()
 
-# Create a line graph showing the global yearly CO2 emissions over time
+# Create a line chart showing the global yearly CO2 emissions over time
 fig = px.line(annual_global_emissions, 
-              x='Year', 
-              y='CO2 Emissions', 
-              title='Global CO2 Emissions Trend (1990-2020)',
-              labels={'Total CO2 Emissions': 'Total CO2 Emissions (metric tons)',
-                      'Year': 'Year'},
-              line_shape='linear')
+              x="Year", 
+              y="CO2 Emissions", 
+              title="Global CO2 Emissions Trend (1990-2020)",
+              labels={"Total CO2 Emissions": "Total CO2 Emissions (metric tons)",
+                      "Year": "Year"},
+              line_shape="spline")
 
 # Customizing line color and adding markers
 fig.update_traces(line=dict(color='#b30000', width=2), mode='lines+markers')
 
-# Show plot
+# Show line chart
 fig.show()
 
 """ C02 emissions by Country"""
-
 # Sum CO2 emmissions for each country across all years
 country_total_emissions = co2_data.groupby("Country Name")["CO2 Emissions"].sum().reset_index()
 
@@ -41,9 +41,6 @@ fig = px.choropleth(country_total_emissions,
                     color_continuous_scale=px.colors.diverging.RdYlGn_r,
                     title="Total CO2 Emissions by Country (1990-2020)")
 
-# Hide color legend for better readibility
-fig.update_layout(coloraxis_showscale=False)
-
 # Show the visualization
 fig.show()
 
@@ -55,7 +52,7 @@ fig = px.bar(top_emitters,
              x='Country Name',
              y='CO2 Emissions',
              color="CO2 Emissions",
-             color_continuous_scale=px.colors.diverging.RdBu_r,
+             color_continuous_scale=px.colors.diverging.RdYlGn_r,
              title='Total CO2 Emissions from 1990 to 2020 for Top 10 Emitting Countries',
              labels={'CO2 Emissions':'Total CO2 Emissions (metric tons)'},
              text='CO2 Emissions')
@@ -98,7 +95,7 @@ fig.update_layout(
 )
 
 # Show the figure
-fig.show()
+#fig.show()
 
 """Population vs CO2 Emissions"""
 # Average the CO2 Emissions and population for each country over all years
@@ -116,7 +113,7 @@ co2_pop_data = pd.merge(pop_mean, co2_mean, on="Country Code")
 # Merge with 'country data'
 co2_pop_data = pd.merge(co2_pop_data, country_data, on="Country Code")
 
-# Create the buble chart
+# Create the bubble chart
 fig = px.scatter(co2_pop_data,
                  x="Population",
                  y="CO2 Emissions",
@@ -135,4 +132,4 @@ fig.update_layout(
 )
 
 # Show the chart
-fig.show()
+#fig.show()
