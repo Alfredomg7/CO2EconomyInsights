@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.express as px
 from functools import reduce
 from colors import income_group_colors
+from helper_functions import create_bubble_chart
 
 # Load cleaned datasets
 path = "data/clean_data/"
@@ -80,45 +81,18 @@ dataframes = [gdp_mean, pop_mean, co2_mean, country_data]
 # Merge the GDP, Population, CO2 and Country data with reduce
 total_data = reduce(lambda left, right: pd.merge(left, right, on='Country Code', suffixes=('', '_right')), dataframes)
 
+# Calculate GDP vs CO2 Emissions Correlation
+gdp_co2_corr = total_data["GDP"].corr(total_data["CO2 Emissions"])
+print(f"Correlation coefficient between GDP and CO2 Emissions: {gdp_co2_corr}")
+
+# Calculate Population vs CO2 Emissions Correlation
+pop_co2_corr = total_data["Population"].corr(total_data["CO2 Emissions"])
+print(f"Correlation coefficient between Population and CO2 Emissions: {pop_co2_corr}")
+
 # Splitting data between small and big countries based on median population for all countries
 median_population = round(total_data["Population"].median()) # Using median value will split the countries evenly
 small_countries_data = total_data[total_data["Population"] < median_population]
 big_countries_data = total_data[total_data["Population"] >= median_population]
-
-# Define function to create bubble chart
-def create_bubble_chart(data, data_label, xaxis_title, yaxis_title, x="GDP", y="CO2 Emissions", size=None, 
-                        color="IncomeGroup", hover_name="Country Name", start_year="1990", end_year="2020", log=True):
-    
-    # Adjust the title based on whether a size dimension is provided
-    title_suffix = f" by {size} and {color}" if size else f" and {color}"
-    full_title = f"{x} vs {y}{title_suffix} from {start_year} to {end_year} ({data_label})"
-
-    # Create the scatter plot
-    scatter_kwargs = dict(
-        x=x,
-        y=y,
-        color=color,
-        hover_name=hover_name,
-        title=full_title,
-        log_x=log,
-        log_y=log,
-        color_discrete_map=income_group_colors
-    )
-    
-    if size:
-        scatter_kwargs['size'] = size
-        scatter_kwargs['size_max'] = 60
-
-    fig = px.scatter(data, **scatter_kwargs)
-    
-    # Customize the layout
-    fig.update_layout(
-        xaxis_title=xaxis_title,
-        yaxis_title=yaxis_title
-    )
-    
-    # Display chart
-    fig.show()
 
 # Create bubble chart for small countries data
 data_label = "Small Countries"
@@ -134,6 +108,10 @@ create_bubble_chart(big_countries_data, data_label=data_label, xaxis_title=xaxis
 """GDP vs Emissions per Capita"""
 # Create emissions per capita column
 total_data["CO2 Emissions per Capita"] = total_data["CO2 Emissions"] / total_data ["Population"]
+
+# Calculate GDP vs CO2 Emissions per Capita Correlation
+gdp_co2_per_capita_corr = total_data["GDP"].corr(total_data["CO2 Emissions per Capita"])
+print(f"Correlation coefficient between GDP and CO2 Emissions per Capita: {gdp_co2_per_capita_corr}")
 
 # Create scatter plot
 data_label = "All Countries"

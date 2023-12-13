@@ -1,4 +1,6 @@
 import pandas as pd
+import plotly.express as px
+from colors import income_group_colors
 
 def inspect_data(data):
     # Print the first 10 rows of the DataFrame
@@ -72,7 +74,40 @@ def melt_data(data, value_name, id_vars=["Country Name", "Country Code"], var_na
     melted_data = data.melt(id_vars=id_vars, var_name=var_name, value_name=value_name)
     return melted_data
 
+# Define function to create bubble chart
+def create_bubble_chart(data, data_label, xaxis_title, yaxis_title, x="GDP", y="CO2 Emissions", size=None, 
+                        color="IncomeGroup", hover_name="Country Name", start_year="1990", end_year="2020", log=True):
+    
+    # Adjust the title based on whether a size dimension is provided
+    title_suffix = f" by {size} and {color}" if size else f" and {color}"
+    full_title = f"{x} vs {y}{title_suffix} from {start_year} to {end_year} ({data_label})"
 
+    # Create the scatter plot
+    scatter_kwargs = dict(
+        x=x,
+        y=y,
+        color=color,
+        hover_name=hover_name,
+        title=full_title,
+        log_x=log,
+        log_y=log,
+        color_discrete_map=income_group_colors
+    )
+    
+    if size:
+        scatter_kwargs['size'] = size
+        scatter_kwargs['size_max'] = 60
+
+    fig = px.scatter(data, **scatter_kwargs)
+    
+    # Customize the layout
+    fig.update_layout(
+        xaxis_title=xaxis_title,
+        yaxis_title=yaxis_title
+    )
+    
+    # Display chart
+    fig.show()
 
 
 
