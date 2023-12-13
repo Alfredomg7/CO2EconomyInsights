@@ -1,7 +1,8 @@
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
 from functools import reduce
-from colors import income_group_colors
 from helper_functions import create_bubble_chart
 
 # Load cleaned datasets
@@ -82,11 +83,11 @@ dataframes = [gdp_mean, pop_mean, co2_mean, country_data]
 total_data = reduce(lambda left, right: pd.merge(left, right, on='Country Code', suffixes=('', '_right')), dataframes)
 
 # Calculate GDP vs CO2 Emissions Correlation
-gdp_co2_corr = total_data["GDP"].corr(total_data["CO2 Emissions"])
+gdp_co2_corr = round(total_data["GDP"].corr(total_data["CO2 Emissions"]), 2)
 print(f"Correlation coefficient between GDP and CO2 Emissions: {gdp_co2_corr}")
 
 # Calculate Population vs CO2 Emissions Correlation
-pop_co2_corr = total_data["Population"].corr(total_data["CO2 Emissions"])
+pop_co2_corr = round(total_data["Population"].corr(total_data["CO2 Emissions"]), 2)
 print(f"Correlation coefficient between Population and CO2 Emissions: {pop_co2_corr}")
 
 # Splitting data between small and big countries based on median population for all countries
@@ -110,7 +111,7 @@ create_bubble_chart(big_countries_data, data_label=data_label, xaxis_title=xaxis
 total_data["CO2 Emissions per Capita"] = total_data["CO2 Emissions"] / total_data ["Population"]
 
 # Calculate GDP vs CO2 Emissions per Capita Correlation
-gdp_co2_per_capita_corr = total_data["GDP"].corr(total_data["CO2 Emissions per Capita"])
+gdp_co2_per_capita_corr = round(total_data["GDP"].corr(total_data["CO2 Emissions per Capita"]), 2)
 print(f"Correlation coefficient between GDP and CO2 Emissions per Capita: {gdp_co2_per_capita_corr}")
 
 # Create scatter plot
@@ -119,3 +120,32 @@ xaxis_title = "Average GDP (in USD - log scale)"
 yaxis_title = "Average CO2 Emissions per Capita (in metric tons - log scale)"
 y = "CO2 Emissions per Capita"
 create_bubble_chart(total_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title, y=y)
+
+"""CO2 Emissions and Global Average Temperature Trend"""
+# Get average temperature for each year
+annual_average_temperature = temp_data.groupby("Year")["Temperature"].mean().reset_index()
+
+# Create container for dual axis line chart
+fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+# Add Global CO2 Emissions to the primary y-axis
+fig.add_trace(
+    go.Scatter(x=annual_global_emissions["Year"], y=annual_global_emissions["CO2 Emissions"], 
+                name='CO2 Emissions'), secondary_y=False)
+
+# Add Global Average Temperature to the secondary y-axis
+fig.add_trace(
+    go.Scatter(x=annual_average_temperature["Year"], y=annual_average_temperature["Temperature"], 
+               name='AVG Temperature'), secondary_y=True)
+
+# Add figure title
+fig.update_layout(
+    title_text="CO2 Emissions and Global Average Temperature Over Time")
+
+# Set axis titles
+fig.update_xaxes(title_text="Year")
+fig.update_yaxes(title_text="CO2 Emissions", secondary_y=False)
+fig.update_yaxes(title_text="Global Average Temperature", secondary_y=True)
+
+# Show the dual axis line chart 
+fig.show()
