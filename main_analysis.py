@@ -124,7 +124,7 @@ total_data["CO2 Emissions per Capita"] = total_data["CO2 Emissions"] / total_dat
 
 # Create scatter plot
 data_label = "All Countries"
-xaxis_title = "Average GDP (in USD)"
-yaxis_title = "Average CO2 Emissions per Capita"
+xaxis_title = "Average GDP (in USD - log scale)"
+yaxis_title = "Average CO2 Emissions per Capita (in metric tons - log scale)"
 y = "CO2 Emissions per Capita"
-create_bubble_chart(total_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title, y=y, size=None, log=False)
+create_bubble_chart(total_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title, y=y, size=None)
