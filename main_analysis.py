@@ -1,6 +1,7 @@
 import pandas as pd
 import plotly.express as px
 from functools import reduce
+from colors import income_group_colors
 
 # Load cleaned datasets
 path = "data/clean_data/"
@@ -84,27 +85,38 @@ median_population = round(total_data["Population"].median()) # Using median valu
 small_countries_data = total_data[total_data["Population"] < median_population]
 big_countries_data = total_data[total_data["Population"] >= median_population]
 
-# Define function for create bubble chart
-def create_bubble_chart(data, data_label, xaxis_title, yaxis_title, x="GDP", y="CO2 Emissions", size="Population", 
+# Define function to create bubble chart
+def create_bubble_chart(data, data_label, xaxis_title, yaxis_title, x="GDP", y="CO2 Emissions", size=None, 
                         color="IncomeGroup", hover_name="Country Name", start_year="1990", end_year="2020", log=True):
     
-    fig = px.scatter(data,
-                    x=x,
-                    y=y,
-                    size=size,
-                    color=color,
-                    hover_name=hover_name,
-                    title=f"{x} vs {y} by {size} and {color} from {start_year} to {end_year} ({data_label})",
-                    size_max=60,
-                    log_x=log,
-                    log_y=log
-                    )
+    # Adjust the title based on whether a size dimension is provided
+    title_suffix = f" by {size} and {color}" if size else f" and {color}"
+    full_title = f"{x} vs {y}{title_suffix} from {start_year} to {end_year} ({data_label})"
+
+    # Create the scatter plot
+    scatter_kwargs = dict(
+        x=x,
+        y=y,
+        color=color,
+        hover_name=hover_name,
+        title=full_title,
+        log_x=log,
+        log_y=log,
+        color_discrete_map=income_group_colors
+    )
+    
+    if size:
+        scatter_kwargs['size'] = size
+        scatter_kwargs['size_max'] = 60
+
+    fig = px.scatter(data, **scatter_kwargs)
     
     # Customize the layout
     fig.update_layout(
         xaxis_title=xaxis_title,
         yaxis_title=yaxis_title
     )
+    
     # Display chart
     fig.show()
 
@@ -112,11 +124,12 @@ def create_bubble_chart(data, data_label, xaxis_title, yaxis_title, x="GDP", y="
 data_label = "Small Countries"
 xaxis_title = "Average GDP (in USD - log scale)"
 yaxis_title = "Average CO2 Emissions (in metric tons - log scale)"
-create_bubble_chart(small_countries_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title)
+size = "Population"
+create_bubble_chart(small_countries_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title, size=size)
 
 # Create bubble chart for big countries data
 data_label = "Big Countries"
-create_bubble_chart(big_countries_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title)
+create_bubble_chart(big_countries_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title, size=size)
 
 """GDP vs Emissions per Capita"""
 # Create emissions per capita column
@@ -127,4 +140,4 @@ data_label = "All Countries"
 xaxis_title = "Average GDP (in USD - log scale)"
 yaxis_title = "Average CO2 Emissions per Capita (in metric tons - log scale)"
 y = "CO2 Emissions per Capita"
-create_bubble_chart(total_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title, y=y, size=None)
+create_bubble_chart(total_data, data_label=data_label, xaxis_title=xaxis_title, yaxis_title=yaxis_title, y=y)
