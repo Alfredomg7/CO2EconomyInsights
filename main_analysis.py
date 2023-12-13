@@ -125,12 +125,15 @@ create_bubble_chart(total_data, data_label=data_label, xaxis_title=xaxis_title, 
 # Get average temperature for each year
 annual_average_temperature = temp_data.groupby("Year")["Temperature"].mean().reset_index()
 
+# Filter C02 data to have same data range as temperature data (1990 - 2013)
+annual_global_emissions_filtered = annual_global_emissions[annual_global_emissions["Year"] < 2014]
+
 # Create container for dual axis line chart
 fig = make_subplots(specs=[[{"secondary_y": True}]])
 
 # Add Global CO2 Emissions to the primary y-axis
 fig.add_trace(
-    go.Scatter(x=annual_global_emissions["Year"], y=annual_global_emissions["CO2 Emissions"], 
+    go.Scatter(x=annual_global_emissions_filtered["Year"], y=annual_global_emissions_filtered["CO2 Emissions"], 
                 name='CO2 Emissions'), secondary_y=False)
 
 # Add Global Average Temperature to the secondary y-axis
@@ -144,8 +147,8 @@ fig.update_layout(
 
 # Set axis titles
 fig.update_xaxes(title_text="Year")
-fig.update_yaxes(title_text="CO2 Emissions", secondary_y=False)
-fig.update_yaxes(title_text="Global Average Temperature", secondary_y=True)
+fig.update_yaxes(title_text="CO2 Emissions (metric tons)", secondary_y=False)
+fig.update_yaxes(title_text="Global Average Temperature (°C)", secondary_y=True)
 
 # Show the dual axis line chart 
 fig.show()
