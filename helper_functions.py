@@ -98,8 +98,13 @@ def create_bubble_chart(data, data_label, xaxis_title, yaxis_title, x="GDP", y="
         scatter_kwargs['size'] = size
         scatter_kwargs['size_max'] = 60
 
-    fig = px.scatter(data, **scatter_kwargs)
+    # Prepare the hover data
+    hover_data = {x: ':.2s', y: ':.2s'}
+    if size:
+        hover_data[size] = ':.2s'
     
+    fig = px.scatter(data, **scatter_kwargs, hover_data=hover_data)
+
     # Customize the layout
     fig.update_layout(
         xaxis_title=xaxis_title,
@@ -108,6 +113,3 @@ def create_bubble_chart(data, data_label, xaxis_title, yaxis_title, x="GDP", y="
     
     # Display chart
     fig.show()
-
-
-
