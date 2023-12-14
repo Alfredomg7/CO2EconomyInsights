@@ -26,24 +26,24 @@ The primary objective of this project is to analyze the trends and correlations 
 
 ## Get Started
 ### Prerequisites
-Before running the analysis, ensure you have Python installed on your system. You will also need specific libraries for data processing and visualization. Install them using:
+Ensure you have Python (preferably Python 3.10) and Git installed on your system. You will also need specific libraries for data processing and visualization. Install them using:
 `pip install pandas plotly`
 ## Steps
-1. ### Clone the Repository:
-clone the repository to your local machine.
+### 1. Clone the Repository:
+clone the repository to your local machine using:
+`git clone https://github.com/Alfredomg7/CO2EconomyInsights`
 
-2. ### Data Cleaning:
+### 2. Data Cleaning:
 - Navigate to the directory containing the `clean_data.py` script.
-- Run the script to clean and preprocess the datasets. This will generate cleaned versions of the data required for analysis.
-- Command to run:
+- Run the script to clean and preprocess the datasets. This generates cleaned versions of the data required for analysis.
 `python clean_data.py`
 
-3. ### Running the Main Analysis:
+### 3. Running the Main Analysis:
 - After cleaning the data, navigate to the directory containing the `main_analysis` module.
 - Execute the module to create the Plotly charts for the analysis.
-- Command to run:
 `python main_analysis.py`
 
 ## Notes:
-- Make sure all datasets are correctly placed in the designated data directory as referenced in the scripts.
-- Ensure that you have internet access while running the scripts as some libraries may need to fetch additional data or resources online.
+- Ensure all datasets are correctly placed in the designated data directory as referenced in the scripts.
+- You need internet access while running the scripts, as some libraries may fetch additional data or resources online.
+- The results will be displayed directly in your Python environment or can be exported as HTML files for easy sharing and viewing.
