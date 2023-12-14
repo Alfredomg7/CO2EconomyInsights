@@ -12,17 +12,38 @@ The primary objective of this project is to analyze the trends and correlations 
 - **Chart**: Line graph showing the global yearly CO2 emissions over time.
 - **Purpose**: Visualize the overall trend of CO2 emissions globally, identifying periods of increase or decrease.
 2. **Geographical Distribution and Top Contributors to CO2 Emissions**:
-- **Chart**: Interactive global map visualizing total CO2 emissions by country from 1990 to 2020 and a bar chart showing top contributors emissions.
+- **Chart**:  Interactive global map visualizing total CO2 emissions by country from 1990 to 2020 and a bar chart showing top contributors' emissions with compacted data points.
 - **Purpose**: Identify major contributors to global CO2 emissions. The interactive map provides a global overview, while the bar chart highlights the top 10 contributors.
-3. **Correlation Between GDP and CO2 Emissions**:
-- **Chart**: Scatter plot with GDP on the x-axis and CO2 emissions on the y-axis, possibly utilizing a trend line or color-coding by country/region.
-- **Purpose**: Analyze the relationship between economic development (GDP) and CO2 emissions, exploring whether economic growth leads to higher emissions.
-4. **Population Size and CO2 Emissions**:
-- **Chart**: Bubble chart where each bubble’s size represents a country's population, placed on a grid of CO2 emissions vs time or GDP.
-- **Purpose**: To investigate if countries with larger populations tend to have higher emissions, and if population growth correlates with emission increases.
+3. **Correlation Between GDP, Population and, CO2 Emissions**:
+- **Chart**: Bubble chart where the size of each bubble represents a country's population, placed on a grid of CO2 emissions versus GDP.
+- **Purpose**: Investigate if countries with larger economies or populations tend to have higher emissions, and if economic growth and population size correlate with emission increases.
+4. **Emissions per Capita vs GDP**:
+- **Chart**: Scatter plot analyzing the relationship between CO2 emissions per capita and GDP, highlighting how economic growth relates to emissions on a per-person basis.
+- **Purpose**: Explore if higher economic output (GDP) correlates with higher or lower CO2 emissions per capita, providing insights into how economic development impacts environmental sustainability on an individual level.
 5. **Temperature Changes Alongside CO2 Emissions**:
 - **Chart**: Dual-axis line chart with yearly average temperatures and CO2 emissions over time.
-- **Purpose**: To explore potential correlations between rising temperatures and increasing CO2 emissions, providing insights into climate change dynamics.
+- **Purpose**: Explore potential correlations between rising temperatures and increasing CO2 emissions, providing insights into climate change dynamics.
 
 ## Get Started
-Dive into the analysis, explore the datasets, visualize the trends, and discover insights that could pave the way for a sustainable future. Your contributions, findings, and insights are always welcome as we collectively endeavor to understand and address the challenges of climate change.
+### Prerequisites
+Before running the analysis, ensure you have Python installed on your system. You will also need specific libraries for data processing and visualization. Install them using:
+`pip install pandas plotly`
+## Steps
+1. ### Clone the Repository:
+clone the repository to your local machine.
+
+2. ### Data Cleaning:
+- Navigate to the directory containing the `clean_data.py` script.
+- Run the script to clean and preprocess the datasets. This will generate cleaned versions of the data required for analysis.
+- Command to run:
+`python clean_data.py`
+
+3. ### Running the Main Analysis:
+- After cleaning the data, navigate to the directory containing the `main_analysis` module.
+- Execute the module to create the Plotly charts for the analysis.
+- Command to run:
+`python main_analysis.py`
+
+## Notes:
+- Make sure all datasets are correctly placed in the designated data directory as referenced in the scripts.
+- Ensure that you have internet access while running the scripts as some libraries may need to fetch additional data or resources online.
