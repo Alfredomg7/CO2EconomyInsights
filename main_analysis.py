@@ -17,6 +17,8 @@ country_data = pd.read_csv(f"{path}cleaned_country_data.csv")
 # Sum the CO2 emissions for each year 
 annual_global_emissions = co2_data.groupby("Year")["CO2 Emissions"].sum().reset_index()
 
+
+
 # Create a line chart showing the global yearly CO2 emissions over time
 fig = px.line(annual_global_emissions, 
               x="Year", 
@@ -24,7 +26,8 @@ fig = px.line(annual_global_emissions,
               title="Global CO2 Emissions Trend (1990-2020)",
               labels={"Total CO2 Emissions": "Total CO2 Emissions (metric tons)",
                       "Year": "Year"},
-              line_shape="spline")
+              line_shape="spline",
+              hover_data={"CO2 Emissions": ':.2s'})
 
 # Customizing line color and adding markers
 fig.update_traces(line=dict(color='#b30000', width=2), mode='lines+markers')
@@ -43,7 +46,8 @@ fig = px.choropleth(country_total_emissions,
                     color="CO2 Emissions",
                     hover_name="Country Name",
                     color_continuous_scale=px.colors.diverging.RdYlGn_r,
-                    title="Total CO2 Emissions by Country (1990-2020)")
+                    title="Total CO2 Emissions by Country (1990-2020)",
+                    hover_data={"CO2 Emissions": ':.2s'})
 
 # Show the visualization
 fig.show()
@@ -59,7 +63,8 @@ fig = px.bar(top_emitters,
              color_continuous_scale=px.colors.diverging.RdYlGn_r,
              title='Total CO2 Emissions from 1990 to 2020 for Top 10 Emitting Countries',
              labels={'CO2 Emissions':'Total CO2 Emissions (metric tons)'},
-             text='CO2 Emissions')
+             text='CO2 Emissions',
+             hover_data={"CO2 Emissions": ':.2s'})
 
 # Customize the layout for better readability
 fig.update_layout(xaxis_tickangle=-45, 
@@ -133,13 +138,19 @@ fig = make_subplots(specs=[[{"secondary_y": True}]])
 
 # Add Global CO2 Emissions to the primary y-axis
 fig.add_trace(
-    go.Scatter(x=annual_global_emissions_filtered["Year"], y=annual_global_emissions_filtered["CO2 Emissions"], 
-                name='CO2 Emissions'), secondary_y=False)
+    go.Scatter(x=annual_global_emissions_filtered["Year"], 
+               y=annual_global_emissions_filtered["CO2 Emissions"], 
+               name='CO2 Emissions', 
+               hovertemplate='%{x}<br>CO2 Emissions: %{y:.2s}<extra></extra>'),
+    secondary_y=False)
 
 # Add Global Average Temperature to the secondary y-axis
 fig.add_trace(
-    go.Scatter(x=annual_average_temperature["Year"], y=annual_average_temperature["Temperature"], 
-               name='AVG Temperature'), secondary_y=True)
+    go.Scatter(x=annual_average_temperature["Year"], 
+               y=annual_average_temperature["Temperature"], 
+               name='AVG Temperature', 
+               hovertemplate='%{x}<br>Temperature: %{y:.1f}°C<extra></extra>'),
+    secondary_y=True)
 
 # Add figure title
 fig.update_layout(
