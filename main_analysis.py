@@ -133,6 +133,10 @@ annual_average_temperature = temp_data.groupby("Year")["Temperature"].mean().res
 # Filter C02 data to have same data range as temperature data (1990 - 2013)
 annual_global_emissions_filtered = annual_global_emissions[annual_global_emissions["Year"] < 2014]
 
+# Calculate CO2 Emissions vs Global Average Temperature Correlation
+co2_temp_corr = round( annual_global_emissions_filtered["CO2 Emissions"].corr(annual_average_temperature["Temperature"]), 2)
+print(f"Correlation coefficient between CO2 Emissions and Global Average Temperature: {co2_temp_corr}")
+
 # Create container for dual axis line chart
 fig = make_subplots(specs=[[{"secondary_y": True}]])
 
