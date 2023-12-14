@@ -30,8 +30,8 @@ def clean_indicators_data(data, valid_countries, indicator_name):
 def clean_country_data(data,valid_countries):
     # Drop the 'SpecialNotes' column from the DataFrame
     clean_data = data.drop(columns=["SpecialNotes"])
-    # Rename the 'TableName' column to 'Country Name
-    clean_data.rename(columns={"TableName":"Country Name"}, inplace=True)
+    # Rename the 'TableName' column to 'Country Name' and 'IncomeGroup' column to 'Income Group'
+    clean_data.rename(columns={"TableName":"Country Name", "IncomeGroup":"Income Group"}, inplace=True)
     # Reorder the columns to place 'Country Name' at the first position
     cols = ["Country Name"] + [col for col in clean_data if col!= "Country Name"]
     clean_data = clean_data[cols]
@@ -76,7 +76,7 @@ def melt_data(data, value_name, id_vars=["Country Name", "Country Code"], var_na
 
 # Define function to create bubble chart
 def create_bubble_chart(data, data_label, xaxis_title, yaxis_title, x="GDP", y="CO2 Emissions", size=None, 
-                        color="IncomeGroup", hover_name="Country Name", start_year="1990", end_year="2020", log=True):
+                        color="Income Group", hover_name="Country Name", start_year="1990", end_year="2020", log=True):
     
     # Adjust the title based on whether a size dimension is provided
     title_suffix = f" by {size} and {color}" if size else f" and {color}"
