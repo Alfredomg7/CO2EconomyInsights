@@ -5,6 +5,7 @@ Welcome to CO2EconomyInsights! This project is an in-depth analysis aimed at unc
 Understanding the dynamics of CO2 emissions is crucial for effective policy formulation, awareness-raising, and climate action. This project offers accessible, comprehensible, and actionable insights into these dynamics.
 
 ![TotalCO2EmissionsbyCountry](images/total_co2_emissions_by_country.png)
+
 *This world map displays CO2 emissions by country from 1990 to 2020, highlighting the global distribution and identifying major contributors*
 
 ## Project Breakdown
@@ -75,23 +76,28 @@ jupyter notebook notebook.ipynb
 
 ### Global CO2 Emissions Over Time
 ![GlobalCO2EmissionsTrend](images/global_co2_emissions_trend.png)
+
 *This line graph shows the global CO2 emissions from 1990 to 2020. It reveals a clear upward trend, highlighting the increasing environmental challenge over three decades.*
 
 ### CO2 Emissions Top 10 Countries
 ![CO2EmissionsTop10EmittingCountries](images/top_10_emitting_countries.png)
+
 *This bar chart presents the top 10 CO2 emitting countries from 1990 to 2020, providing insight into the largest contributors to global emissions.*
 
 ### Correlation Between GDP, Population, and CO2 Emissions
 ![GDPPopulationCO2CorrelationBigCountries](images/gdp_co2_pop_bubble_chart_big_countries.png)
 ![GDPPopulationCO2CorrelationSmallCountries](images/gdp_co2_pop_bubble_chart_small_countries.png)
+
 *These bubble charts for small and big countries compare average GDP with average CO2 emissions, using population size as the bubble scale. They explore the relationship between economic output, population, and emissions.*
 
 ### GDP vs CO2 Emissions per Capita
 ![GDPvsCO2EmissionsPerCapita](images/gdp_co2_per_capita_bubble_chart.png)
+
 *This scatter plot analyzes the relationship between average GDP and CO2 emissions per capita, examining the impact of economic development on emissions.*
 
 ### CO2 Emissions and Global Average Temperature Correlation
 ![CO2EmissionsvsTemperature](images/co2_emissions_vs_global_temp_dual_line_chart.png)
+
 *The dual-axis line chart compares global CO2 emissions with average global temperatures, illustrating the potential link between emissions and climate change.*
 
 ## Conclusion
